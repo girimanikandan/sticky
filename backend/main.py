@@ -73,6 +73,14 @@ async def generate(request: GenerateRequest):
         raise HTTPException(status_code=500, detail=f"DB write error: {str(e)}")
 
     return neo4j_service.get_all_notes_and_relationships()
+@app.get("/debug-env")
+def debug_env():
+    return {
+        "URI": os.getenv("NEO4J_URI"),
+        "USER": os.getenv("NEO4J_USER"),
+        "PASS": os.getenv("NEO4J_PASSWORD")
+    }
+
 
 
 @app.get("/notes")

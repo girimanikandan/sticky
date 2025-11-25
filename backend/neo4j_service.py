@@ -4,18 +4,27 @@ from typing import List, Dict, Any
 from datetime import datetime
 import uuid
 
-NEO4J_URI = os.getenv("NEO4J_URI")
-NEO4J_USER = os.getenv("NEO4J_USER")
-NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD")
-
 class Neo4jService:
-    def __init__(self, uri=NEO4J_URI, user=NEO4J_USER, password=NEO4J_PASSWORD):
+    def __init__(self):
+        # 🔥 Load env variables INSIDE __init__, after load_dotenv() runs
+        uri = os.getenv("NEO4J_URI")
+        user = os.getenv("NEO4J_USER")
+        password = os.getenv("NEO4J_PASSWORD")
+
+        print("Neo4j connecting with:")
+        print("URI:", uri)
+        print("USER:", user)
+        print("PASSWORD:", "******")
+
         if not uri or not user or not password:
             raise ValueError("NEO4J_URI, NEO4J_USER and NEO4J_PASSWORD must be set in environment.")
+
         self.driver = GraphDatabase.driver(uri, auth=(user, password))
 
     def close(self):
         self.driver.close()
+
+    # (keep the rest same)
 
     def create_note(self, note: Dict[str, Any]) -> Dict[str, Any]:
         """
